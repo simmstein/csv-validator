@@ -1,0 +1,21 @@
+{
+    "name": "deblan/csv-validator",
+    "description": "CSV validator library",
+    "license": "BSD-2-Clause",
+    "authors": [
+        {
+            "name": "Simon Vieille",
+            "email": "simon@deblan.fr"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "": "src/"
+        }
+    },
+    "minimum-stability": "stable",
+    "require": {
+        "symfony/validator": "2.*",
+        "deblan/csv": "dev-master"
+    }
+}
