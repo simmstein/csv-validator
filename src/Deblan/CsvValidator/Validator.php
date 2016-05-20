@@ -6,21 +6,50 @@ use Deblan\Csv\CsvParser;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validator\RecursiveValidator;
+use Symfony\Component\Validator\ConstraintViolation;
 
+/**
+ * Class Validator
+ * @author Simon Vieille <simon@deblan.fr>
+ */
 class Validator
 {
+    /**
+     * @var CsvParser
+     */
     protected $parser;
 
+    /**
+     * @var RecursiveValidator
+     */
     protected $validator;
 
+    /**
+     * @var array
+     */
     protected $fieldsConstraints = [];
 
+    /**
+     * @var array
+     */
     protected $dataConstraints = [];
 
+    /**
+     * @var boolean
+     */
     protected $hasValidate = false;
 
+    /**
+     * @var array
+     */
     protected $errors = [];
 
+    /**
+     * Constructor
+     *
+     * @param CsvParser $parser
+     * @param RecursiveValidator $validator
+     */
     public function __construct(CsvParser $parser, RecursiveValidator $validator)
     {
         $this->parser = $parser;
@@ -28,6 +57,13 @@ class Validator
         $this->validator = $validator;
     }
 
+    /**
+     * Append a constraint to a specific column
+     *
+     * @param $key The column number
+     * @param Constraint $constraint The constraint
+     * @return Validator
+     */
     public function addFieldConstraint($key, Constraint $constraint)
     {
         if (!array_key_exists($key, $this->fieldsConstraints)) {
@@ -39,13 +75,23 @@ class Validator
         return $this;
     }
 
-    public function addDataContraint(Constraint $constraint)
+    /**
+     * Append a constraint to a specific line
+     *
+     * @param $key The column number
+     * @param Constraint $constraint The constraint
+     * @return Validator
+     */
+    public function addDataConstraint(Constraint $constraint)
     {
         $this->dataConstraints[] = $constraint;
 
         return $this;
     }
 
+    /**
+     * Run the validation
+     */
     public function validate()
     {
         if ($this->hasValidate) {
@@ -75,14 +121,17 @@ class Validator
         $this->hasValidate = true;
     }
 
+    /**
+     * Add violations
+     *
+     * @param ConstraintViolationList $violations
+     * @param integer $line The line of the violations
+     * @param integer|null $key The column of the violations
+     */
     protected function mergeViolationsMessages(ConstraintViolationList $violations, $line, $key = null)
     {
         if (count($violations) === 0) {
             return;
-        }
-
-        if (!array_key_exists($line, $this->errors)) {
-            $this->errors[$line] = [];
         }
 
         if (is_int($key)) {
@@ -90,12 +139,17 @@ class Validator
         }
 
         foreach ($violations as $violation) {
-            $message = sprintf('Line %d%s: %s', $line + 1, $key !== null ? ', field '.($key) : '', $violation->getMessage());
-
-            $this->errors[$line][] = $message;
+            $this->errors[] = new Violation($line + 1, $key, $violation);
         }
     }
 
+    /**
+     * Create and append a violation from a string error
+     *
+     * @param string $message The error message
+     * @param integer $line The line of the violations
+     * @param integer|null $key The column of the violations
+     */
     protected function mergeErrorMessage($message, $line, $key = null)
     {
         if (!array_key_exists($line, $this->errors)) {
@@ -106,11 +160,16 @@ class Validator
             $key++;
         }
 
-        $message = sprintf('Line %d%s: %s', $line + 1, $key !== null ? ', field '.($key) : '', $message);
-
-        $this->errors[$line][] = $message;
+        $violation = new ConstraintViolation($message, $message, [], null, '', null);
+        $this->errors[] = new Violation($line + 1, $key, $violation);
     }
 
+    /**
+     * Returns the validation status
+     *
+     * @return boolean
+     * @throw RuntimeException No validation yet
+     */
     public function isValid()
     {
         if (!$this->hasValidate) {
@@ -120,6 +179,11 @@ class Validator
         return empty($this->errors);
     }
 
+    /**
+     * Returns the errors
+     *
+     * @return array
+     */
     public function getErrors()
     {
         return $this->errors;

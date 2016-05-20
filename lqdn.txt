@@ -1,0 +1,47 @@
+ANDERSSON Max;max.andersson europarl.europa.eu
+BERGERON Joëlle;joelle.bergeron@europarl.europa.eu
+BOUTONNET Marie Christine;marie-christine.boutonnet@europarl.europa.eu
+CAVADA Jean Marie;jean-marie.cavada@europarl.europa.eu
+CHRYSOGONOS Kostas;kostas.chrysogonos@europarl.europa.eu
+COMODINI CACHIA Therese;therese.comodinicachia@europarl.europa.eu
+DELVAUX STEHRES Mady;mady.delvaux-stehres@europarl.europa.eu
+DUDA Andrzej Sebastian;andrzej.duda@europarl.europa.eu
+ESTARÀS FERRAGUT Rosa;rosa.estaras@europarl.europa.eu
+FERRARA Laura;laura.ferrara@europarl.europa.eu
+GASBARRA Enrico;enrico.gasbarra@europarl.europa.eu
+GERINGER de OEDENBERG Lidia Joannavv;lidiajoanna.geringerdeoedenberg@europarl.europa.eu
+HONEYBALL Mary;mary.honeyball@europarl.europa.eu
+KARIM Sajjad;sajjad.karim@europarl.europa.eu
+KÖSTER Dietmar;dietmar.koester@europarl.europa.eu
+LEBRETON Gilles;gilles.lebreton@europarl.europa.eu
+MARINHO E PINTO António;antonio.marinhoepinto@europarl.europa.eu
+MAŠTÁLKA Jiří;jiri.mastalka@europarl.europa.eu
+RADEV Emil;emil.radev@europarl.europa.eu
+REDA Julia;julia.reda@europarl.europa.eu
+REGNER Evelyn;evelyn.regner@europarl.europa.eu
+SVOBODA Pavel;pavel.svoboda@europarl.europa.eu
+SZÁJER József;jozsef.szajer@europarl.europa.eu
+VOSS Axel;axel.voss@europarl.europa.eu
+ZWIEFKA Tadeusz;tadeusz.zwiefka@europarl.europa.eu
+BORGHESIO Mario;mario.borghezio@europarl.europa.eu
+BUDA Daniel;daniel.buda@europarl.europa.eu
+CASTALDO Fabio Massimo;fabiomassimo.castaldo@europarl.europa.eu
+COFFERATI Sergio Gaetano;sergio.cofferati@europarl.europa.eu
+CORRAO Ignazio;ignazio.corrao@europarl.europa.eu
+CROWLEY Brian;brian.crowley@europarl.europa.eu
+DURAND Pascal;pascal.durand@europarl.europa.eu
+DZHAMBAZKI Angel;angel.dzhambazki@europarl.europa.eu
+GEBHARDT Evelyne;evelyne.gebhardt@europarl.europa.eu
+de GRANDES PASCUAL Luis;luis.degrandespascual@europarl.europa.eu
+GUTELAND Jytte;jytte.guteland@europarl.europa.eu
+HAUTALA Heidi;heidi.hautala@europarl.europa.eu
+KAUFMANN Sylvie-Yvonne;sylvia-yvonne.kaufmann@europarl.europa.eu
+LE GRIP Constance;constance.legrip@europarl.europa.eu
+NEGRESCU Victor;victor.negrescu@europarl.europa.eu
+NIEBLER Angelika;angelika.niebler@europarl.europa.eu
+ROZIÈRE Virginie;virginie.roziere@europarl.europa.eu
+TOTI Giovanni;giovanni.toti@europarl.europa.eu
+USPASKICH Viktor;viktor.uspaskich@europarl.europa.eu
+WIELAND Rainer;rainer.wieland@europarl.europa.eu
+WIKSTRÖM Cecilia;cecilia.wikstrom@europarl.europa.eu
+ŻÓŁTEK Stanisław;stanislawjozef.zoltek@europarl.europa.eu
