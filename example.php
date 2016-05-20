@@ -10,11 +10,28 @@ chdir(__DIR__);
 
 require 'vendor/autoload.php';
 
-$parser = new CsvParser('lqdn.txt', ';', '');
+$parser = new CsvParser('example.csv', ';', '');
 
 $validator = new Validator($parser, Validation::createValidator());
-$validator->addFieldConstraint(1, new Email());
+
+$validator->addFieldConstraint(0, new Email());
+$validator->addFieldConstraint(1, new Date());
+
 $validator->validate();
 
-var_dump($validator->isValid());
-var_dump($validator->getErrors());
+if ($validator->isValid() === false) {
+    foreach ($validator->getErrors() as $violation) {
+        $line = $violation->getLine(); 
+        $column = $violation->getColumn();
+        $message = $violation->getViolation()->getMessage();
+
+        echo <<<EOF
+Line   : $line
+Column : $column
+Message: $message
+
+
+EOF;
+
+    }
+}
