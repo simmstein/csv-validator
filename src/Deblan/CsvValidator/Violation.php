@@ -79,7 +79,7 @@ class Violation
 
     /**
      * @param ConstraintViolation $violation
-     * @return 
+     * @return Violation
      */
     public function setViolation(ConstraintViolation $violation)
     {
@@ -89,12 +89,10 @@ class Violation
     }
 
     /**
-     * @return ConstraintViolation $violation
+     * @return ConstraintViolation
      */
     public function getViolation()
     {
         return $this->violation;
     }
-
 }
-
