@@ -9,8 +9,8 @@
         }
     ],
     "autoload": {
-        "psr-0": {
-            "": "src/"
+        "psr-4": {
+            "Deblan\\CsvValidator\\": "src/Deblan/CsvValidator/"
         }
     },
     "minimum-stability": "stable",

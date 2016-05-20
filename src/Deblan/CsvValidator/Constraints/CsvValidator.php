@@ -1,6 +1,6 @@
 <?php
 
-namespace Deblan\Validator\Constraints;
+namespace Deblan\CsvValidator\Constraints;
 
 use Symfony\Component\Validator\Constraints\FileValidator;
 use Symfony\Component\Validator\Constraint;

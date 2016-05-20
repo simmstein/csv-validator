@@ -4,8 +4,8 @@ namespace Deblan\CsvValidator;
 
 use Deblan\Csv\CsvParser;
 use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\Validator\LegacyValidator;
 use Symfony\Component\Validator\ConstraintViolationList;
+use Symfony\Component\Validator\Validator\RecursiveValidator;
 
 class Validator
 {
@@ -21,7 +21,7 @@ class Validator
 
     protected $errors = [];
 
-    public function __construct(CsvParser $parser, LegacyValidator $validator)
+    public function __construct(CsvParser $parser, RecursiveValidator $validator)
     {
         $this->parser = $parser;
         $this->parser->parse();
@@ -77,6 +77,10 @@ class Validator
 
     protected function mergeViolationsMessages(ConstraintViolationList $violations, $line, $key = null)
     {
+        if (count($violations) === 0) {
+            return;
+        }
+
         if (!array_key_exists($line, $this->errors)) {
             $this->errors[$line] = [];
         }
