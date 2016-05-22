@@ -64,7 +64,11 @@ class Violation
      */
     public function setColumn($column)
     {
-        $this->column = (int) $column;
+        if ($column !== null) {
+            $column = (int) $column;
+        }
+
+        $this->column = $column;
 
         return $this;
     }

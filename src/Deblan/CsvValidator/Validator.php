@@ -118,7 +118,7 @@ class Validator
             foreach ($this->dataConstraints as $constraint) {
                 $violations = $this->validator->validateValue($data, $constraint);
 
-                $this->mergeViolationsMessages($violations, $line);
+                $this->mergeViolationsMessages($violations, $this->getTrueLine($line));
             }
         }
     }
@@ -135,12 +135,21 @@ class Validator
         foreach ($this->parser->getDatas() as $line => $data) {
             foreach ($this->fieldConstraints as $key => $constraints) {
                 if (!isset($data[$key])) {
-                    $this->mergeErrorMessage(sprintf('Field "%s" does not exist.', $key + 1), $line, $key);
+                    $column = $this->getTrueColunm($key);
+                    $this->mergeErrorMessage(
+                        sprintf('Field "%s" does not exist.', $column), 
+                        $this->getTrueLine($line), 
+                        $column
+                    );
                 } else {
                     foreach ($constraints as $constraint) {
                         $violations = $this->validator->validateValue($data[$key], $constraint);
 
-                        $this->mergeViolationsMessages($violations, $line, $key);
+                        $this->mergeViolationsMessages(
+                            $violations, 
+                            $this->getTrueLine($line), 
+                            $this->getTrueColunm($key)
+                        );
                     }
                 }
             }
@@ -160,12 +169,8 @@ class Validator
             return;
         }
 
-        if (is_int($key)) {
-            $key++;
-        }
-
         foreach ($violations as $violation) {
-            $this->errors[] = $this->generateViolation($line + 1, $key, $violation);
+            $this->errors[] = $this->generateViolation($line, $key, $violation);
         }
     }
 
@@ -178,16 +183,8 @@ class Validator
      */
     protected function mergeErrorMessage($message, $line, $key = null)
     {
-        if (!array_key_exists($line, $this->errors)) {
-            $this->errors[$line] = [];
-        }
-
-        if (is_int($key)) {
-            $key++;
-        }
-
         $violation = $this->generateConstraintViolation($message);
-        $this->errors[] = $this->generateViolation($line + 1, $key, $violation);
+        $this->errors[] = $this->generateViolation($line, $key, $violation);
     }
 
     /**
@@ -237,5 +234,31 @@ class Validator
     protected function generateViolation($line, $key, ConstraintViolation $violation) 
     {
         return new Violation($line, $key, $violation);
+    }
+
+    /**
+     * Get the true line number of an error
+     *
+     * @param integer $line
+     * @return integer
+     */
+    protected function getTrueLine($line) 
+    {
+        if ($this->parser->getHasLegend()) {
+            $line++;
+        }
+
+        return ++$line;
+    }
+    
+    /**
+     * Get the true culumn number of an error
+     *
+     * @param integer $key
+     * @return integer
+     */
+    protected function getTrueColunm($key) 
+    {
+        return ++$key;
     }
 }
