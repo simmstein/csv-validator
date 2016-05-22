@@ -27,7 +27,7 @@ class Validator
     /**
      * @var array
      */
-    protected $fieldsConstraints = [];
+    protected $fieldConstraints = [];
 
     /**
      * @var array
@@ -66,11 +66,11 @@ class Validator
      */
     public function addFieldConstraint($key, Constraint $constraint)
     {
-        if (!array_key_exists($key, $this->fieldsConstraints)) {
-            $this->fieldsConstraints[$key] = [];
+        if (!array_key_exists($key, $this->fieldConstraints)) {
+            $this->fieldConstraints[$key] = [];
         }
 
-        $this->fieldsConstraints[$key][] = $constraint;
+        $this->fieldConstraints[$key][] = $constraint;
 
         return $this;
     }
@@ -98,14 +98,42 @@ class Validator
             return;
         }
 
+        $this->validateDatas();
+        $this->validateFields();
+
+
+        $this->hasValidate = true;
+    }
+    
+    /**
+     * Validates datas
+     */
+    protected function validateDatas() 
+    {
+        if (empty($this->dataConstraints)) {
+            return;
+        }
+
         foreach ($this->parser->getDatas() as $line => $data) {
             foreach ($this->dataConstraints as $constraint) {
                 $violations = $this->validator->validateValue($data, $constraint);
 
                 $this->mergeViolationsMessages($violations, $line);
             }
+        }
+    }
 
-            foreach ($this->fieldsConstraints as $key => $constraints) {
+    /**
+     * Validates fields
+     */
+    protected function validateFields() 
+    {
+        if (empty($this->fieldConstraints)) {
+            return;
+        }
+        
+        foreach ($this->parser->getDatas() as $line => $data) {
+            foreach ($this->fieldConstraints as $key => $constraints) {
                 if (!isset($data[$key])) {
                     $this->mergeErrorMessage(sprintf('Field "%s" does not exist.', $key + 1), $line, $key);
                 } else {
@@ -117,8 +145,6 @@ class Validator
                 }
             }
         }
-
-        $this->hasValidate = true;
     }
 
     /**
@@ -139,7 +165,7 @@ class Validator
         }
 
         foreach ($violations as $violation) {
-            $this->errors[] = new Violation($line + 1, $key, $violation);
+            $this->errors[] = $this->generateViolation($line + 1, $key, $violation);
         }
     }
 
@@ -160,8 +186,8 @@ class Validator
             $key++;
         }
 
-        $violation = new ConstraintViolation($message, $message, [], null, '', null);
-        $this->errors[] = new Violation($line + 1, $key, $violation);
+        $violation = $this->generateConstraintViolation($message);
+        $this->errors[] = $this->generateViolation($line + 1, $key, $violation);
     }
 
     /**
@@ -187,5 +213,29 @@ class Validator
     public function getErrors()
     {
         return $this->errors;
+    }
+
+    /**
+     * Generate a ConstraintViolation
+     *
+     * @param string $message The error message
+     * @return ConstraintViolation
+     */
+    protected function generateConstraintViolation($message) 
+    {
+        return new ConstraintViolation($message, $message, [], null, '', null);
+    }
+    
+    /**
+     * Generate a Violation
+     *
+     * @param string $message The error message
+     * @param integer $line The line of the violations
+     * @param integer|null $key The column of the violations
+     * @return Violation
+     */
+    protected function generateViolation($line, $key, ConstraintViolation $violation) 
+    {
+        return new Violation($line, $key, $violation);
     }
 }
