@@ -90,6 +90,19 @@ class Validator
     }
 
     /**
+     * Set the excepted legend
+     *
+     * @param array $legend Expected legend
+     * @return Validator
+     */
+    public function setExceptedLegend(array $legend) 
+    {
+        $this->expectedLegend = $legend;
+
+        return $this;
+    }
+
+    /**
      * Run the validation
      */
     public function validate()
@@ -98,6 +111,7 @@ class Validator
             return;
         }
 
+        $this->validateLegend();
         $this->validateDatas();
         $this->validateFields();
 
@@ -105,6 +119,21 @@ class Validator
         $this->hasValidate = true;
     }
     
+    protected function validateLegend() 
+    {
+        if (!$this->parser->getHasLegend()) {
+            return;
+        }
+
+        if (null === $this->expectedLegend) {
+            return;
+        }
+    
+        if ($this->parser->getLegend() !== $this->expectedLegend) {
+            $this->mergeErrorMessage('Invalid legend.', 1);
+        }
+    }
+
     /**
      * Validates datas
      */

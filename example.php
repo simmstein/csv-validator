@@ -23,6 +23,9 @@ $validator->addFieldConstraint(0, new Email());
 // The second field must contain a date
 $validator->addFieldConstraint(1, new Date());
 
+// Validate the legend
+$validator->setExceptedLegend(array('foo', 'bar', 'bim'));
+
 // An line must contain 3 columns
 $validator->addDataConstraint(new Callback(function($data, ExecutionContextInterface $context) {
     if (count($data) !== 6) { // 6 because of the legend (3 fields * 2)
