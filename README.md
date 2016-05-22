@@ -52,12 +52,21 @@ $validator->addDataConstraint(new Callback(function($data, ExecutionContextInter
 $validator->validate();
 
 if ($validator->isValid() === false) {
-    foreach ($validator->getErrors() as $violation) {
-        $line = $violation->getLine(); 
-        $column = $violation->getColumn();
-        $message = $violation->getViolation()->getMessage();
+    foreach ($validator->getErrors() as $error) {
+        $line = $error->getLine(); 
+        $column = $error->getColumn();
+        $message = $error->getViolation()->getMessage();
         
-        // Up to you!
+        echo <<<EOF
+<ul>
+    <li>Line: $line</li>
+    <li>Column: $column</li>
+    <li>
+        <p>$message</p>
+    </li>
+</ul>
+
+EOF;
     }
 }
 ```
