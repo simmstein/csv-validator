@@ -5,17 +5,30 @@ use Deblan\CsvValidator\Validator;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Date;
+use Symfony\Component\Validator\Constraints\Callback;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
-chdir(__DIR__);
+require __DIR__.'/vendor/autoload.php';
 
-require 'vendor/autoload.php';
+// Initialisation of the parser
+$parser = new CsvParser(__DIR__.'/tests/fixtures/example.csv');
+$parser->setHasLegend(true);
 
-$parser = new CsvParser('example.csv', ';', '');
-
+// Initialisation of the validator
 $validator = new Validator($parser, Validation::createValidator());
 
+// The first field must contain an email
 $validator->addFieldConstraint(0, new Email());
+
+// The second field must contain a date
 $validator->addFieldConstraint(1, new Date());
+
+// An line must contain 3 columns
+$validator->addDataConstraint(new Callback(function($data, ExecutionContextInterface $context) {
+    if (count($data) !== 6) { // 6 because of the legend (3 fields * 2)
+        $context->addViolation('The line must contain 3 columns');
+    }
+}));
 
 $validator->validate();
 
@@ -24,14 +37,7 @@ if ($validator->isValid() === false) {
         $line = $violation->getLine(); 
         $column = $violation->getColumn();
         $message = $violation->getViolation()->getMessage();
-
-        echo <<<EOF
-Line   : $line
-Column : $column
-Message: $message
-
-
-EOF;
-
+        
+        // Up to you!
     }
 }
