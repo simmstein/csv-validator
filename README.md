@@ -8,7 +8,7 @@ That uses the constraints of Symfony framework: [http://symfony.com/doc/current/
 Installation
 ------------
 
-You need [composer]("https://getcomposer.org/"):
+You need [composer](https://getcomposer.org/):
 
 	composer require deblan/csv-validator dev-master
 
