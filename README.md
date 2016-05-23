@@ -29,12 +29,8 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 require __DIR__.'/vendor/autoload.php';
 
-// Initialisation of the parser
-$parser = new CsvParser(__DIR__.'/tests/fixtures/example.csv');
-$parser->setHasLegend(true);
-
 // Initialisation of the validator
-$validator = new Validator($parser, Validation::createValidator());
+$validator = new Validator();
 
 // The first field must contain an email
 $validator->addFieldConstraint(0, new Email());
@@ -52,7 +48,11 @@ $validator->addDataConstraint(new Callback(function($data, ExecutionContextInter
     }
 }));
 
-$validator->validate();
+// Initialisation of the parser
+$parser = new CsvParser(__DIR__.'/tests/fixtures/example.csv');
+$parser->setHasLegend(true);
+
+$validator->validate($parser);
 
 if ($validator->isValid() === false) {
     foreach ($validator->getErrors() as $error) {

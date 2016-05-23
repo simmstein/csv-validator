@@ -7,6 +7,7 @@ use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validator\RecursiveValidator;
 use Symfony\Component\Validator\ConstraintViolation;
+use Symfony\Component\Validator\Validation;
 
 /**
  * Class Validator
@@ -55,10 +56,12 @@ class Validator
      * @param CsvParser $parser
      * @param RecursiveValidator $validator
      */
-    public function __construct(CsvParser $parser, RecursiveValidator $validator)
+    public function __construct(RecursiveValidator $validator = null)
     {
-        $this->parser = $parser;
-        $this->parser->parse();
+        if ($validator === null) {
+            $validator = Validation::createValidator();
+        } 
+        
         $this->validator = $validator;
     }
 
@@ -110,12 +113,17 @@ class Validator
     /**
      * Run the validation
      */
-    public function validate()
+    public function validate(CsvParser $parser)
     {
-        if ($this->hasValidate) {
+        if ($this->parser !== $parser) {
+            $this->parser = $parser;
+            $this->parser->parse();
+            $this->errors = [];
+        }
+        elseif ($this->hasValidate) {
             return;
         }
-
+        
         $this->validateLegend();
         $this->validateDatas();
         $this->validateFields();
@@ -123,7 +131,10 @@ class Validator
 
         $this->hasValidate = true;
     }
-    
+   
+    /**
+     * Validates the legend
+     */
     protected function validateLegend() 
     {
         if (!$this->parser->getHasLegend()) {
