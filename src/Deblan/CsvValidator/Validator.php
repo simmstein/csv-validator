@@ -43,6 +43,11 @@ class Validator
      * @var array
      */
     protected $errors = [];
+    
+    /**
+     * @var array
+     */
+    protected $expectedLegend = [];
 
     /**
      * Constructor
@@ -125,7 +130,7 @@ class Validator
             return;
         }
 
-        if (null === $this->expectedLegend) {
+        if (empty($this->expectedLegend)) {
             return;
         }
     
