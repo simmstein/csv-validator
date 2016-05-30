@@ -98,12 +98,12 @@ class Validator
     }
 
     /**
-     * Set the excepted legend
+     * Set the expected legend
      *
      * @param array $legend Expected legend
      * @return Validator
      */
-    public function setExceptedLegend(array $legend) 
+    public function setExpectedLegend(array $legend) 
     {
         $this->expectedLegend = $legend;
 
