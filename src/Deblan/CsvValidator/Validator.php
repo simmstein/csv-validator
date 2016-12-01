@@ -53,7 +53,6 @@ class Validator
     /**
      * Constructor
      *
-     * @param CsvParser $parser
      * @param RecursiveValidator $validator
      */
     public function __construct(RecursiveValidator $validator = null)
@@ -68,7 +67,7 @@ class Validator
     /**
      * Append a constraint to a specific column
      *
-     * @param $key The column number
+     * @param integer $key The column number
      * @param Constraint $constraint The constraint
      * @return Validator
      */
@@ -86,7 +85,6 @@ class Validator
     /**
      * Append a constraint to a specific line
      *
-     * @param $key The column number
      * @param Constraint $constraint The constraint
      * @return Validator
      */
@@ -112,6 +110,7 @@ class Validator
 
     /**
      * Run the validation
+     * @param CsvParser $parser
      */
     public function validate(CsvParser $parser)
     {
@@ -161,7 +160,7 @@ class Validator
 
         foreach ($this->parser->getDatas() as $line => $data) {
             foreach ($this->dataConstraints as $constraint) {
-                $violations = $this->validator->validateValue($data, $constraint);
+                $violations = $this->validator->validate($data, $constraint);
 
                 $this->mergeViolationsMessages($violations, $this->getTrueLine($line));
             }
@@ -188,7 +187,7 @@ class Validator
                     );
                 } else {
                     foreach ($constraints as $constraint) {
-                        $violations = $this->validator->validateValue($data[$key], $constraint);
+                        $violations = $this->validator->validate($data[$key], $constraint);
 
                         $this->mergeViolationsMessages(
                             $violations, 
