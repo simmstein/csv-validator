@@ -16,6 +16,24 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $validator->isValid();
     }
 
+    public function testExpectedLegend()
+    {
+        $parser = $this->generateParser('example.csv');
+        $parser->setHasLegend(true);
+
+        $validator = $this->generateValidator();
+        $validator->setExpectedLegend(['foo', 'bar', 'boo']);
+        $validator->validate($parser);
+        $this->assertEquals(true, $validator->isValid());
+        $this->assertEquals(0, count($validator->getErrors()));
+
+        $validator = $this->generateValidator();
+        $validator->setExpectedLegend(['bad', 'legend']);
+        $validator->validate($parser);
+        $this->assertEquals(false, $validator->isValid());
+        $this->assertEquals(1, count($validator->getErrors()));
+    }
+
     public function testNoConstraint()
     {
         $parser = $this->generateParser('example.csv');
