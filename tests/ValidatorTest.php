@@ -15,63 +15,63 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('\RuntimeException');
         $validator->isValid();
     }
-    
+
     public function testNoConstraint()
     {
         $parser = $this->generateParser('example.csv');
-        $validator = $this->generateValidator($parser);
-        $validator->validate();
+        $validator = $this->generateValidator();
+        $validator->validate($parser);
         $this->assertEquals(true, $validator->isValid());
     }
-    
+
     public function testFieldContraintsOk()
     {
         $parser = $this->generateParser('example.csv');
-        $validator = $this->generateValidator($parser);
+        $validator = $this->generateValidator();
         $validator->addFieldConstraint(0, new NotBlank());
-        $validator->validate();
+        $validator->validate($parser);
         $this->assertEquals(true, $validator->isValid());
         $this->assertEquals(0, count($validator->getErrors()));
-        
+
         $parser = $this->generateParser('example.csv');
-        $validator = $this->generateValidator($parser);
+        $validator = $this->generateValidator();
         $validator->addFieldConstraint(1, new NotBlank());
-        $validator->validate();
+        $validator->validate($parser);
         $this->assertEquals(true, $validator->isValid());
         $this->assertEquals(0, count($validator->getErrors()));
-        
+
         $parser = $this->generateParser('example.csv');
-        $validator = $this->generateValidator($parser);
+        $validator = $this->generateValidator();
         $validator->addFieldConstraint(0, new NotBlank());
         $validator->addFieldConstraint(1, new NotBlank());
-        $validator->validate();
+        $validator->validate($parser);
         $this->assertEquals(true, $validator->isValid());
         $this->assertEquals(0, count($validator->getErrors()));
     }
-    
+
     public function testFieldContraintsKo()
     {
         $parser = $this->generateParser('example.csv');
-        $validator = $this->generateValidator($parser);
+        $validator = $this->generateValidator();
         $validator->addFieldConstraint(0, new Email());
-        $validator->validate();
+        $validator->validate($parser);
         $this->assertEquals(false, $validator->isValid());
-        $this->assertEquals(4, count($validator->getErrors()));
-        
+        $this->assertEquals(2, count($validator->getErrors()));
+
         $parser = $this->generateParser('example.csv');
-        $validator = $this->generateValidator($parser);
+        $validator = $this->generateValidator();
         $validator->addFieldConstraint(1, new Email());
-        $validator->validate();
+        $validator->validate($parser);
         $this->assertEquals(false, $validator->isValid());
-        $this->assertEquals(4, count($validator->getErrors()));
-        
+        $this->assertEquals(5, count($validator->getErrors()));
+
         $parser = $this->generateParser('example.csv');
-        $validator = $this->generateValidator($parser);
+        $validator = $this->generateValidator();
         $validator->addFieldConstraint(0, new Email());
         $validator->addFieldConstraint(1, new Email());
-        $validator->validate();
+        $validator->validate($parser);
         $this->assertEquals(false, $validator->isValid());
-        $this->assertEquals(8, count($validator->getErrors()));
+        $this->assertEquals(7, count($validator->getErrors()));
     }
 
     protected function generateParser($file)
@@ -79,8 +79,8 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         return new CsvParser(__DIR__.'/fixtures/'.$file);
     }
 
-    protected function generateValidator(CsvParser $parser) 
+    protected function generateValidator()
     {
-        return new Validator($parser, Validation::createValidator());
+        return new Validator(Validation::createValidator());
     }
 }
