@@ -10,7 +10,7 @@ Installation
 
 You need [composer](https://getcomposer.org/):
 
-	composer require deblan/csv-validator dev-master
+	composer require deblan/csv-validator
 
 
 Example
@@ -56,10 +56,10 @@ $validator->validate($parser);
 
 if ($validator->isValid() === false) {
     foreach ($validator->getErrors() as $error) {
-        $line = $error->getLine(); 
+        $line = $error->getLine();
         $column = $error->getColumn();
         $message = $error->getViolation()->getMessage();
-        
+
         echo <<<EOF
 <ul>
     <li>Line: $line</li>
