@@ -10,7 +10,8 @@ use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\Validation;
 
 /**
- * Class Validator
+ * Class Validator.
+ *
  * @author Simon Vieille <simon@deblan.fr>
  */
 class Validator
@@ -36,7 +37,7 @@ class Validator
     protected $dataConstraints = [];
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $hasValidate = false;
 
@@ -44,14 +45,14 @@ class Validator
      * @var array
      */
     protected $errors = [];
-    
+
     /**
      * @var array
      */
     protected $expectedLegend = [];
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param RecursiveValidator $validator
      */
@@ -59,16 +60,17 @@ class Validator
     {
         if ($validator === null) {
             $validator = Validation::createValidator();
-        } 
-        
+        }
+
         $this->validator = $validator;
     }
 
     /**
-     * Append a constraint to a specific column
+     * Append a constraint to a specific column.
      *
-     * @param integer $key The column number
+     * @param int        $key        The column number
      * @param Constraint $constraint The constraint
+     *
      * @return Validator
      */
     public function addFieldConstraint($key, Constraint $constraint)
@@ -83,9 +85,10 @@ class Validator
     }
 
     /**
-     * Append a constraint to a specific line
+     * Append a constraint to a specific line.
      *
      * @param Constraint $constraint The constraint
+     *
      * @return Validator
      */
     public function addDataConstraint(Constraint $constraint)
@@ -96,12 +99,13 @@ class Validator
     }
 
     /**
-     * Set the expected legend
+     * Set the expected legend.
      *
      * @param array $legend Expected legend
+     *
      * @return Validator
      */
-    public function setExpectedLegend(array $legend) 
+    public function setExpectedLegend(array $legend)
     {
         $this->expectedLegend = $legend;
 
@@ -109,7 +113,8 @@ class Validator
     }
 
     /**
-     * Run the validation
+     * Run the validation.
+     *
      * @param CsvParser $parser
      */
     public function validate(CsvParser $parser)
@@ -118,23 +123,21 @@ class Validator
             $this->parser = $parser;
             $this->parser->parse();
             $this->errors = [];
-        }
-        elseif ($this->hasValidate) {
+        } elseif ($this->hasValidate) {
             return;
         }
-        
+
         $this->validateLegend();
         $this->validateDatas();
         $this->validateFields();
 
-
         $this->hasValidate = true;
     }
-   
+
     /**
-     * Validates the legend
+     * Validates the legend.
      */
-    protected function validateLegend() 
+    protected function validateLegend()
     {
         if (!$this->parser->getHasLegend()) {
             return;
@@ -143,16 +146,16 @@ class Validator
         if (empty($this->expectedLegend)) {
             return;
         }
-    
+
         if ($this->parser->getLegend() !== $this->expectedLegend) {
             $this->mergeErrorMessage('Invalid legend.', 1);
         }
     }
 
     /**
-     * Validates datas
+     * Validates datas.
      */
-    protected function validateDatas() 
+    protected function validateDatas()
     {
         if (empty($this->dataConstraints)) {
             return;
@@ -168,21 +171,21 @@ class Validator
     }
 
     /**
-     * Validates fields
+     * Validates fields.
      */
-    protected function validateFields() 
+    protected function validateFields()
     {
         if (empty($this->fieldConstraints)) {
             return;
         }
-        
+
         foreach ($this->parser->getDatas() as $line => $data) {
             foreach ($this->fieldConstraints as $key => $constraints) {
                 if (!isset($data[$key])) {
                     $column = $this->getTrueColunm($key);
                     $this->mergeErrorMessage(
-                        sprintf('Field "%s" does not exist.', $column), 
-                        $this->getTrueLine($line), 
+                        sprintf('Field "%s" does not exist.', $column),
+                        $this->getTrueLine($line),
                         $column
                     );
                 } else {
@@ -190,8 +193,8 @@ class Validator
                         $violations = $this->validator->validate($data[$key], $constraint);
 
                         $this->mergeViolationsMessages(
-                            $violations, 
-                            $this->getTrueLine($line), 
+                            $violations,
+                            $this->getTrueLine($line),
                             $this->getTrueColunm($key)
                         );
                     }
@@ -201,11 +204,11 @@ class Validator
     }
 
     /**
-     * Add violations
+     * Add violations.
      *
      * @param ConstraintViolationList $violations
-     * @param integer $line The line of the violations
-     * @param integer|null $key The column of the violations
+     * @param int                     $line       The line of the violations
+     * @param int|null                $key        The column of the violations
      */
     protected function mergeViolationsMessages(ConstraintViolationList $violations, $line, $key = null)
     {
@@ -219,11 +222,11 @@ class Validator
     }
 
     /**
-     * Create and append a violation from a string error
+     * Create and append a violation from a string error.
      *
-     * @param string $message The error message
-     * @param integer $line The line of the violations
-     * @param integer|null $key The column of the violations
+     * @param string   $message The error message
+     * @param int      $line    The line of the violations
+     * @param int|null $key     The column of the violations
      */
     protected function mergeErrorMessage($message, $line, $key = null)
     {
@@ -232,9 +235,9 @@ class Validator
     }
 
     /**
-     * Returns the validation status
+     * Returns the validation status.
      *
-     * @return boolean
+     * @return bool
      * @throw RuntimeException No validation yet
      */
     public function isValid()
@@ -247,7 +250,7 @@ class Validator
     }
 
     /**
-     * Returns the errors
+     * Returns the errors.
      *
      * @return array
      */
@@ -257,51 +260,55 @@ class Validator
     }
 
     /**
-     * Generate a ConstraintViolation
+     * Generate a ConstraintViolation.
      *
      * @param string $message The error message
+     *
      * @return ConstraintViolation
      */
-    protected function generateConstraintViolation($message) 
+    protected function generateConstraintViolation($message)
     {
         return new ConstraintViolation($message, $message, [], null, '', null);
     }
-    
+
     /**
-     * Generate a Violation
+     * Generate a Violation.
      *
-     * @param string $message The error message
-     * @param integer $line The line of the violations
-     * @param integer|null $key The column of the violations
+     * @param string   $message The error message
+     * @param int      $line    The line of the violations
+     * @param int|null $key     The column of the violations
+     *
      * @return Violation
      */
-    protected function generateViolation($line, $key, ConstraintViolation $violation) 
+    protected function generateViolation($line, $key, ConstraintViolation $violation)
     {
         return new Violation($line, $key, $violation);
     }
 
     /**
-     * Get the true line number of an error
+     * Get the true line number of an error.
      *
-     * @param integer $line
-     * @return integer
+     * @param int $line
+     *
+     * @return int
      */
-    protected function getTrueLine($line) 
+    protected function getTrueLine($line)
     {
         if ($this->parser->getHasLegend()) {
-            $line++;
+            ++$line;
         }
 
         return ++$line;
     }
-    
+
     /**
-     * Get the true culumn number of an error
+     * Get the true culumn number of an error.
      *
-     * @param integer $key
-     * @return integer
+     * @param int $key
+     *
+     * @return int
      */
-    protected function getTrueColunm($key) 
+    protected function getTrueColunm($key)
     {
         return ++$key;
     }

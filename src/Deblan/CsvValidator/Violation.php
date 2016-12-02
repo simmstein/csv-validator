@@ -5,31 +5,32 @@ namespace Deblan\CsvValidator;
 use Symfony\Component\Validator\ConstraintViolation;
 
 /**
- * Class Violation
+ * Class Violation.
+ *
  * @author Simon Vieille <simon@deblan.fr>
  */
 class Violation
 {
     /**
-     * @var integer
+     * @var int
      */
     protected $line;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $column;
-    
+
     /**
      * @var ConstraintViolation
      */
     protected $violation;
 
     /**
-     * Constructor
+     * Constructor.
      *
-     * @param integer $line The line of the violation
-     * @param integer $column The column of the violation
+     * @param int                 $line      The line of the violation
+     * @param int                 $column    The column of the violation
      * @param ConstraintViolation $violation The violation
      */
     public function __construct($line, $column, ConstraintViolation $violation)
@@ -41,6 +42,7 @@ class Violation
 
     /**
      * @param int $line
+     *
      * @return Violation
      */
     public function setLine($line)
@@ -60,6 +62,7 @@ class Violation
 
     /**
      * @param int $column
+     *
      * @return Violation
      */
     public function setColumn($column)
@@ -83,6 +86,7 @@ class Violation
 
     /**
      * @param ConstraintViolation $violation
+     *
      * @return Violation
      */
     public function setViolation(ConstraintViolation $violation)
