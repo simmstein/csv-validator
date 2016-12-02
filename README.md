@@ -5,6 +5,10 @@ CSV validator library
 
 That uses the constraints of Symfony framework: [http://symfony.com/doc/current/reference/constraints.html](http://symfony.com/doc/current/reference/constraints.html).
 
+* [Installation](#installation)
+* [Example](#example)
+* [Contributors](#contributors)
+
 Installation
 ------------
 
@@ -73,3 +77,9 @@ EOF;
     }
 }
 ```
+
+Contributors
+------------
+
+* Simon Vieille
+* Gautier Deruette
