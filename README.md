@@ -1,6 +1,8 @@
 csv-validator
 =============
 
+![](https://phpci.gitnet.fr//build-status/image/1)
+
 CSV validator library
 
 That uses the constraints of Symfony framework: [http://symfony.com/doc/current/reference/constraints.html](http://symfony.com/doc/current/reference/constraints.html).
