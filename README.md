@@ -45,7 +45,7 @@ $validator->addFieldConstraint(0, new Email());
 $validator->addFieldConstraint(1, new Date());
 
 // Validate the legend
-$validator->setExpectedLegend(array('foo', 'bar', 'bim'));
+$validator->setExpectedHeaders(['foo', 'bar', 'bim']);
 
 // An line must contain 3 columns
 $validator->addDataConstraint(new Callback(function($data, ExecutionContextInterface $context) {
@@ -55,10 +55,10 @@ $validator->addDataConstraint(new Callback(function($data, ExecutionContextInter
 }));
 
 // Initialisation of the parser
-$parser = new CsvParser(__DIR__.'/tests/fixtures/example.csv');
-$parser->setHasLegend(true);
+$parser = new CsvParser();
+$parser->setHasHeaders(true);
 
-$validator->validate($parser);
+$validator->validate($parser->parseFile(__DIR__.'/tests/fixtures/example.csv'));
 
 if ($validator->isValid() === false) {
     foreach ($validator->getErrors() as $error) {
@@ -78,6 +78,39 @@ if ($validator->isValid() === false) {
 EOF;
     }
 }
+```
+
+Run `example.php` and see results:
+
+```
+<ul>
+    <li>Line: 1</li>
+    <li>Column: </li>
+    <li>
+        <p>Invalid legend.</p>
+    </li>
+</ul>
+<ul>
+    <li>Line: 4</li>
+    <li>Column: </li>
+    <li>
+        <p>The line must contain 3 columns</p>
+    </li>
+</ul>
+<ul>
+    <li>Line: 2</li>
+    <li>Column: 1</li>
+    <li>
+        <p>This value is not a valid email address.</p>
+    </li>
+</ul>
+<ul>
+    <li>Line: 3</li>
+    <li>Column: 2</li>
+    <li>
+        <p>This value is not a valid date.</p>
+    </li>
+</ul>
 ```
 
 Contributors

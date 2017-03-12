@@ -49,7 +49,7 @@ class Validator
     /**
      * @var array
      */
-    protected $expectedLegend = [];
+    protected $expectedHeaders = [];
 
     /**
      * Constructor.
@@ -105,9 +105,9 @@ class Validator
      *
      * @return Validator
      */
-    public function setExpectedLegend(array $legend)
+    public function setExpectedHeaders(array $legend)
     {
-        $this->expectedLegend = $legend;
+        $this->expectedHeaders = $legend;
 
         return $this;
     }
@@ -121,13 +121,12 @@ class Validator
     {
         if ($this->parser !== $parser) {
             $this->parser = $parser;
-            $this->parser->parse();
             $this->errors = [];
         } elseif ($this->hasValidate) {
             return;
         }
 
-        $this->validateLegend();
+        $this->validateHeaders();
         $this->validateDatas();
         $this->validateFields();
 
@@ -137,17 +136,17 @@ class Validator
     /**
      * Validates the legend.
      */
-    protected function validateLegend()
+    protected function validateHeaders()
     {
-        if (!$this->parser->getHasLegend()) {
+        if (!$this->parser->getHasHeaders()) {
             return;
         }
 
-        if (empty($this->expectedLegend)) {
+        if (empty($this->expectedHeaders)) {
             return;
         }
 
-        if ($this->parser->getLegend() !== $this->expectedLegend) {
+        if ($this->parser->getHeaders() !== $this->expectedHeaders) {
             $this->mergeErrorMessage('Invalid legend.', 1);
         }
     }
@@ -294,7 +293,7 @@ class Validator
      */
     protected function getTrueLine($line)
     {
-        if ($this->parser->getHasLegend()) {
+        if ($this->parser->getHasHeaders()) {
             ++$line;
         }
 

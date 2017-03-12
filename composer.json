@@ -17,6 +17,6 @@
     "require": {
         "php": ">=5.6.0",
         "symfony/validator": "2.*",
-        "deblan/csv": "v1.1"
+        "deblan/csv": "v2.0.*"
     }
 }

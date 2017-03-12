@@ -20,7 +20,7 @@ $validator->addFieldConstraint(0, new Email());
 $validator->addFieldConstraint(1, new Date());
 
 // Validate the legend
-$validator->setExpectedLegend(array('foo', 'bar', 'bim'));
+$validator->setExpectedHeaders(['foo', 'bar', 'bim']);
 
 // An line must contain 3 columns
 $validator->addDataConstraint(new Callback(function($data, ExecutionContextInterface $context) {
@@ -30,17 +30,17 @@ $validator->addDataConstraint(new Callback(function($data, ExecutionContextInter
 }));
 
 // Initialisation of the parser
-$parser = new CsvParser(__DIR__.'/tests/fixtures/example.csv');
-$parser->setHasLegend(true);
+$parser = new CsvParser();
+$parser->setHasHeaders(true);
 
-$validator->validate($parser);
+$validator->validate($parser->parseFile(__DIR__.'/tests/fixtures/example.csv'));
 
 if ($validator->isValid() === false) {
     foreach ($validator->getErrors() as $error) {
-        $line = $error->getLine(); 
+        $line = $error->getLine();
         $column = $error->getColumn();
         $message = $error->getViolation()->getMessage();
-        
+
         echo <<<EOF
 <ul>
     <li>Line: $line</li>
