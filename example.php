@@ -2,7 +2,6 @@
 
 use Deblan\Csv\CsvParser;
 use Deblan\CsvValidator\Validator;
-use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Component\Validator\Constraints\Callback;
@@ -23,7 +22,7 @@ $validator->addFieldConstraint(1, new Date());
 $validator->setExpectedHeaders(['foo', 'bar', 'bim']);
 
 // An line must contain 3 columns
-$validator->addDataConstraint(new Callback(function($data, ExecutionContextInterface $context) {
+$validator->addDataConstraint(new Callback(function ($data, ExecutionContextInterface $context) {
     if (count($data) !== 6) { // 6 because of the legend (3 fields * 2)
         $context->addViolation('The line must contain 3 columns');
     }
